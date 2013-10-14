@@ -1,2 +1,6 @@
 import requests
-import sockets
+import socket
+
+r = requests.get('https://github.com/timeline.json')
+
+

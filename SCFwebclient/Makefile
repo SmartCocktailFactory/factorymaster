@@ -5,7 +5,7 @@ CFLAGS=-c -Wall
 # Libraries
 INCLUDE = -I/usr/local/include
 LDFLAGS = -L/usr/local/lib 
-LDLIBS = -lcurl
+LDLIBS = -lcurl -ljsoncpp -lstdc++
 
 SOURCES = webclient.cpp com.cpp
 OUT = webclient
