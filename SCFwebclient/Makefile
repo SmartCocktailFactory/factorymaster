@@ -1,22 +1,23 @@
-# I am a comment, and I want to say that the variable CC will be
-# the compiler to use.
+
 CC=g++
-# Hey!, I am comment number 2. I want to say that CFLAGS will be the
-# options I'll pass to the compiler.
 CFLAGS=-c -Wall
 
+# Libraries
+INCLUDE = -I/usr/local/include
+LDFLAGS = -L/usr/local/lib 
+LDLIBS = -lcurl
 
+SOURCES = webclient.cpp com.cpp
+OUT = webclient
+
+.PHONY: all
 
 all: webclient
 
-webclient: webclient.o com.o
-	$(CC) webclient.o com.o -o webclient
+$(OUT): $(patsubst %.cpp,%.o,$(SOURCES))
 
-webclient.o: webclient.cpp
-	$(CC) $(CFLAGS) webclient.cpp
-
-com.o: com.cpp
-	$(CC) $(CFLAGS) com.cpp
+%.o: %.c
+	$(CC) -c $(INCLUDE) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $<
 
 clean:
 	rm -rf *o webclient
