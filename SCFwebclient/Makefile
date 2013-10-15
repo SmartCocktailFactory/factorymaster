@@ -7,7 +7,7 @@ INCLUDE = -I/usr/local/include
 LDFLAGS = -L/usr/local/lib 
 LDLIBS = -lcurl -ljsoncpp -lstdc++
 
-SOURCES = webclient.cpp com.cpp
+SOURCES = webclien.cpp com.cpp
 OUT = webclient
 
 .PHONY: all
