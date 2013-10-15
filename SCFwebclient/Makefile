@@ -1,6 +1,6 @@
 
 CC=g++
-CFLAGS=-c -Wall
+CFLAGS=-c -Wall -DDEBUG -g -ggdb
 
 # Libraries
 INCLUDE = -I/usr/local/include
@@ -17,7 +17,7 @@ all: webclient
 $(OUT): $(patsubst %.cpp,%.o,$(SOURCES))
 
 %.o: %.c
-	$(CC) -c $(INCLUDE) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $<
+	$(CC) -c  $(INCLUDE) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $<
 
 clean:
 	rm -rf *o webclient
