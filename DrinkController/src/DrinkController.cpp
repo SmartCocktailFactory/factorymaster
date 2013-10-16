@@ -41,6 +41,10 @@ static void* CommandManager(void *)
   bm.AssignBottleToLiquidStation( "Cola", E_LiquidDeliverySystemIndex_3 );
 
   MicroControllerCommunication uCCom;
+
+
+	      uCCom.SendDeliverIceCube( 1u );
+
   //  for (;;)
     {
       /* Poll order */
@@ -75,7 +79,7 @@ static void* CommandManager(void *)
 	      //sps.CheckDeliveryDoneSuccessfull( );
 	    }
 	  /* Push finishing */
-	  communicationInterface.respondDone( );
+	  communicationInterface.respondDone(order.orderId );
 	}
       else
 	{

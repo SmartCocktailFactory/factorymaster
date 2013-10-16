@@ -27,7 +27,7 @@ class Com
     public:
         void init();
         void getOrder(Order_t* order);
-        void respondDone(); 
+        void respondDone(int id); 
         void cleanup();
 };
 
