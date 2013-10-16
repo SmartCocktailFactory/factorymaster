@@ -82,6 +82,10 @@ bool TCP::WriteData(int socketHandler, const char* pData, unsigned int numberOfD
 	{
 	  ret = true;
 	}
+      else
+	{
+	  fprintf( stderr, "Sending failed error:%s\n", strerror( errno ) );
+	}
     }
   return ret;
 }

@@ -17,6 +17,7 @@ class LiquidDeliverySystem
  public:
   LiquidDeliverySystem(std::string ip, unsigned int port);
   void DeliverVolume(LiquidDeliverySystemIndex_e stationId, unsigned int volumeToDeliverInMl);
+  bool CheckDeliveryDoneSuccessfull( );
 
  private:
   TCP* pSpsConnection;
