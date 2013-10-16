@@ -2,6 +2,7 @@
 #define _LIQUID_DELIVERY_SYSTEM_H_
 
 #include <string>
+#include "TCP.h"
 
 enum LiquidDeliverySystemIndex_e
   {
@@ -18,7 +19,8 @@ class LiquidDeliverySystem
   void DeliverVolume(LiquidDeliverySystemIndex_e stationId, unsigned int volumeToDeliverInMl);
 
  private:
-
+  TCP* pSpsConnection;
+  int spsHandlerId;
 };
 
 #endif

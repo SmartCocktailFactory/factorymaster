@@ -10,14 +10,10 @@ class BottleManagement
  public:
   BottleManagement( );
   LiquidDeliverySystemIndex_e GetLiquidStationIndex(std::string liquidName);
+  void AssignBottleToLiquidStation(std::string liquidName, LiquidDeliverySystemIndex_e stationIndex);
 
  private:
-  struct LiquidLookUpTable_t
-  {
-    std::string liquidName;
-    LiquidDeliverySystemIndex_e index;
-  };
-  std::vector<LiquidLookUpTable_t> lookUpTable;
+  std::vector<std::string> lookUpTable;
 
   
 };

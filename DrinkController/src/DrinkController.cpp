@@ -1,4 +1,6 @@
-/** INCLUDES **/
+/************************************************************
+    Includes
+*************************************************************/
 #include "../inc/DrinkController.h"
 #include "../inc/BottleManagement.h"
 #include "../inc/LiquidDeliverySystem.h"
@@ -26,14 +28,18 @@ static void* CommandManager(void *)
   BottleManagement bm;
   LiquidDeliverySystemIndex_e stationIndex;
   std::string liquidName; 
-  LiquidDeliverySystem sps( "192.168.1.20", 1000u );
+  LiquidDeliverySystem sps( "127.0.0.1", 1999u );
+  bm.AssignBottleToLiquidStation( "Baccardi", E_LiquidDeliverySystemIndex_1 );
+  bm.AssignBottleToLiquidStation( "Vodka", E_LiquidDeliverySystemIndex_2 );
+  bm.AssignBottleToLiquidStation( "Cola", E_LiquidDeliverySystemIndex_3 );
+
   MicroControllerCommunication uCCom;
   //  for (;;)
     {
       /* Poll order */
 
       /* Ice necessary */
-      uCCom.SendDeliverIceCube(3);
+
 
       /* Look up bottles */
       liquidName = "Baccardi";
