@@ -13,6 +13,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h> 
+#include <signal.h>
+#include <errno.h>
 
 /************************************************************
     Local types
@@ -29,8 +31,8 @@ typedef struct
 /************************************************************
      Local variables 
 *************************************************************/
-TCPWorkingData_t S_tcpWorkingData;
-pthread_mutex_t S_threadMutex;
+static TCPWorkingData_t S_tcpWorkingData;
+static pthread_mutex_t S_threadMutex;
 
 /************************************************************
     Local function prototypes
@@ -40,6 +42,11 @@ static void* TCPReceiveHandler(void* pArg);
 /************************************************************
     Public functions 
 *************************************************************/
+TCP::~TCP( )
+{
+
+}
+
 int TCP::OpenSocket(std::string ip, int port, ReceiveDataCallback_t receiveCallback)
 {
   int socketFileDescriptor = socket( AF_INET, SOCK_STREAM, 0);
@@ -71,11 +78,28 @@ bool TCP::WriteData(int socketHandler, const char* pData, unsigned int numberOfD
 
   if (isConnected)
     {
-      write( socketHandler, pData, numberOfData );
+      if (write( socketHandler, pData, numberOfData ) != -1)
+	{
+	  ret = true;
+	}
     }
   return ret;
 }
 
+void TCP::WaitUntillConnected( )
+{
+  bool isConnected = false;
+  while (!isConnected)
+    {
+      pthread_mutex_lock( &S_threadMutex );
+      isConnected = S_tcpWorkingData.connected;
+      pthread_mutex_unlock( &S_threadMutex );
+      if (!isConnected)
+	{
+	  sleep( 1u );
+	}
+    }
+}
 /************************************************************
     Local functions
 *************************************************************/
@@ -85,21 +109,28 @@ static void* TCPReceiveHandler(void* pArg)
   struct sockaddr_in addr;
   char buffer[1500];
   int numberOfBytesRead;
+  int err = -1;
+  struct hostent *server;
 
   bzero( (char *) &addr, sizeof( addr ) );
   addr.sin_family = AF_INET;
-  addr.sin_port = htons( pData->port );
-  bcopy( (char *)pData->ip.c_str(),
+  addr.sin_port =  htons( pData->port );
+  server = gethostbyname( pData->ip.c_str() );
+  bcopy( (const char *)server->h_addr,
 	 (char *)&addr.sin_addr.s_addr,
 	 pData->ip.length( ) );
   
   /* Wait for the server to connect */
-  while (connect( pData->socketFileDescriptor, (struct sockaddr *) &addr, sizeof(addr) ) == -1)
+  fprintf( stderr, "Waiting for server:%s port:%u\n",(char *)&addr.sin_addr.s_addr,  addr.sin_port);
+  
+  while (err == -1)
     {
-      fprintf( stderr, "Waiting for server\n" );
+      err = connect( pData->socketFileDescriptor, (struct sockaddr *) &addr, sizeof(addr) );
+      fprintf( stderr, "Waiting for server %d error:%s\n", err, strerror( errno ) );
       sleep( 1u );
     }
-
+  
+  fprintf( stderr, "Connected to server\n" );
   pthread_mutex_lock( &S_threadMutex );
   pData->connected = true;
   pthread_mutex_unlock( &S_threadMutex );
@@ -111,7 +142,9 @@ static void* TCPReceiveHandler(void* pArg)
 	{
 	  pData->receiveCallback( buffer, numberOfBytesRead );
 	} 
+      sleep( 1u );
     }
   return NULL;
 }
+
 

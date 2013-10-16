@@ -8,7 +8,7 @@ typedef void (*ReceiveDataCallback_t)(char* pData, unsigned int numberOfData);
 class SCFSocket
 {
  public:
-  virtual ~SCFSocket();
+  virtual ~SCFSocket() {};
 
   /** Function opens the socket and listens on the port.
       @return The socketHandler.*/

@@ -1,4 +1,6 @@
-/** INCLUDES **/
+/************************************************************
+    Includes
+*************************************************************/
 #include "../inc/DrinkController.h"
 #include "../inc/BottleManagement.h"
 #include "../inc/LiquidDeliverySystem.h"
@@ -25,7 +27,7 @@ static void* CommandManager(void *)
   BottleManagement bm;
   LiquidDeliverySystemIndex_e stationIndex;
   std::string liquidName; 
-  LiquidDeliverySystem sps( "192.168.1.20", 1000u );
+  LiquidDeliverySystem sps( "127.0.0.1", 1999u );
 
   //  for (;;)
     {
@@ -46,6 +48,8 @@ static void* CommandManager(void *)
       /* Push finishing */
 
     }
+
+    
   return NULL;
 }
 
