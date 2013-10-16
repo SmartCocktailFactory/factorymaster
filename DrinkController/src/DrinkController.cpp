@@ -31,7 +31,7 @@ static void* CommandManager(void *)
   BottleManagement bm;
   LiquidDeliverySystemIndex_e stationIndex;
   std::string liquidName; 
-  LiquidDeliverySystem sps( "127.0.0.1", 1999u );
+  LiquidDeliverySystem sps( "192.168.1.120", 200u );
   Com communicationInterface;
   Order_t order;
   
@@ -41,11 +41,22 @@ static void* CommandManager(void *)
   bm.AssignBottleToLiquidStation( "Cola", E_LiquidDeliverySystemIndex_3 );
 
   MicroControllerCommunication uCCom;
-  //  for (;;)
+  //for (;;)
     {
       /* Poll order */
       order.orderId = 0;
-      communicationInterface.getOrder( &order );
+      //communicationInterface.getOrder( &order );
+      
+      order.orderId = 1;
+      order.ingredients.clear( );
+      ingredient_item it;
+      it.name = "Rum";
+      it.amount = 20;
+      order.ingredients.push_back( it );
+      it.name = "Cola";
+      it.amount = 250;
+      order.ingredients.push_back( it );
+
       if (order.orderId != 0)
 	{
 	  fprintf( stderr, "New order:%d \n", order.orderId );
@@ -70,9 +81,12 @@ static void* CommandManager(void *)
 		       order.ingredients[i].amount );
 	      
 	      /* Deliver liquid*/
-	      //sps.DeliverVolume( stationIndex, order.ingredients[i].amount );
-	      /* Wait all done */
-	      //sps.CheckDeliveryDoneSuccessfull( );
+	      fprintf( stderr, "Delivery started.." );
+		      
+	      sps.DeliverVolume( stationIndex, order.ingredients[i].amount );
+	      /* Wait delivery done */
+	      
+	      fprintf( stderr, "Delivery finished %d..", (int) sps.CheckDeliveryDoneSuccessfull( ));
 	    }
 	  /* Push finishing */
 	  communicationInterface.respondDone( );

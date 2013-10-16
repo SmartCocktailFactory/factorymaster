@@ -22,6 +22,15 @@ class LiquidDeliverySystem
  private:
   TCP* pSpsConnection;
   int spsHandlerId;
+
+  void UpdateStationId(LiquidDeliverySystemIndex_e id);
+  void UpdateVolume(unsigned int volumeToDeliverInMl);
+  bool WaitForCmdAccepted(unsigned int method, unsigned int key);
+  void PrepareforNextTransfer( );
+  void StartDeliver( );
+  unsigned int GetStatus();
+  void AckError();
+  void WaitForGlass();
 };
 
 #endif

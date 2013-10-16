@@ -6,7 +6,7 @@ INCLUDE = -I/usr/local/include
 LDFLAGS = -L/usr/local/lib
 LDLIBS = -lpthread -lcurl -ljsoncpp
 
-SOURCES = src/main.cpp src/DrinkController.cpp src/BottleManagement.cpp src/LiquidDeliverySystem.cpp src/TCP.cpp src/com.cpp src/UDP.cpp src/MicroControllerCommunication.cpp
+SOURCES = src/main.cpp src/DrinkController.cpp src/BottleManagement.cpp src/LiquidDeliverySystem.cpp src/TCP.cpp src/com.cpp src/UDP.cpp src/MicroControllerCommunication.cpp src/SPSConverter.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=SCFDrinkController
