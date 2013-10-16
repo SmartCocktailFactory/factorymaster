@@ -16,6 +16,17 @@
 /************************************************************
     Local types
 *************************************************************/
+
+typedef struct
+{
+  std::string ip;
+  int port;
+  ReceiveDataCallback_t receiveCallback;
+  int socketFileDescriptor;
+  struct sockaddr_in from;
+
+} UDPWorkingData_t;
+
 /************************************************************
      Local variables 
 *************************************************************/
@@ -61,12 +72,11 @@ int UDP::OpenSocket(std::string ip, int port, ReceiveDataCallback_t receiveCallb
          hp->h_length);
    server.sin_port = htons(port);
    
-  socket_d = socketFileDescriptor;
-  return 0;
+  return socketFileDescriptor;
 }
 
 
-bool UDP::WriteData(const char* pData, unsigned int numberOfData)
+bool UDP::WriteData(int socket_d, const char* pData, unsigned int numberOfData)
 {
   bool ret = false;
   printf("Writing, handler %d, data %x, size %d\n",socket_d, *pData, numberOfData);
@@ -82,15 +92,19 @@ bool UDP::WriteData(const char* pData, unsigned int numberOfData)
 static void* UDPReceiveHandler(void* pArg)
 {
   UDPWorkingData_t* pData = (UDPWorkingData_t*) pArg;
-  struct sockaddr_in addr;
+  //struct sockaddr_in addr;
   char buffer[1500];
-  int numberOfBytesRead;
-  
+  //int numberOfBytesRead;
+  int status = 0;
+  socklen_t length; 
   for (;;)
     {
       //numberOfBytesRead = read( pData->socketFileDescriptor, buffer, 1500 );
 
-      //recvfrom(socket, buffer, size, 0, (struct sockaddr*)&from, &length);
+       if (0 != recvfrom(pData->socketFileDescriptor, buffer, 1500, 0, (struct sockaddr*)&(pData->from), &length))
+       {
+           fprintf(stderr, "could not read from UDP socket\n");
+       }
        sleep(1u); 
     }
   return NULL;
