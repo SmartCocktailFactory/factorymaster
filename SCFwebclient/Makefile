@@ -7,17 +7,23 @@ INCLUDE = -I/usr/local/include
 LDFLAGS = -L/usr/local/lib 
 LDLIBS = -lcurl -ljsoncpp -lstdc++
 
-SOURCES = webclien.cpp com.cpp
-OUT = webclient
+SOURCES = webclient.cpp com.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=webclient
 
 .PHONY: all
 
-all: webclient
+all: $(SOURCES) $(EXECUTABLE)
 
-$(OUT): $(patsubst %.cpp,%.o,$(SOURCES))
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) $(LDLIBS) -o $@
+#$(OUT): $(patsubst %.cpp,%.o,$(SOURCES))
 
-%.o: %.c
-	$(CC) -c  $(INCLUDE) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $<
+#%.o: %.c
+#	$(CC) -c  $(INCLUDE) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $<
+
+.cpp.o:
+	$(CC) $(CFLAGS) $< -o $@
 
 clean:
 	rm -rf *o webclient
