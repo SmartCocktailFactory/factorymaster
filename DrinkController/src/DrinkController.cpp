@@ -41,22 +41,11 @@ static void* CommandManager(void *)
   bm.AssignBottleToLiquidStation( "Cola", E_LiquidDeliverySystemIndex_3 );
 
   MicroControllerCommunication uCCom;
-  //for (;;)
+    for (;;)
     {
       /* Poll order */
       order.orderId = 0;
-      //communicationInterface.getOrder( &order );
-      
-      order.orderId = 1;
-      order.ingredients.clear( );
-      ingredient_item it;
-      it.name = "Rum";
-      it.amount = 20;
-      order.ingredients.push_back( it );
-      it.name = "Cola";
-      it.amount = 250;
-      order.ingredients.push_back( it );
-
+      communicationInterface.getOrder( &order );
       if (order.orderId != 0)
 	{
 	  fprintf( stderr, "New order:%d \n", order.orderId );
@@ -89,7 +78,7 @@ static void* CommandManager(void *)
 	      fprintf( stderr, "Delivery finished %d..", (int) sps.CheckDeliveryDoneSuccessfull( ));
 	    }
 	  /* Push finishing */
-	  communicationInterface.respondDone( );
+	  communicationInterface.respondDone(order.orderId );
 	}
       else
 	{
