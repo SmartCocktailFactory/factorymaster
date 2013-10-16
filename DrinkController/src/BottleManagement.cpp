@@ -1,28 +1,45 @@
+/************************************************************
+    Includes
+*************************************************************/
 #include "../inc/BottleManagement.h"
 
+/************************************************************
+    Local types
+*************************************************************/
+
+/************************************************************
+     Local variables 
+*************************************************************/
+
+/************************************************************
+    Local function prototypes
+*************************************************************/
+
+/************************************************************
+    Public functions 
+*************************************************************/
   
 BottleManagement::BottleManagement( )
 {
-  LiquidLookUpTable_t t;
-  t.liquidName = "Vodka";
-  t.index = E_LiquidDeliverySystemIndex_1;
-  lookUpTable.push_back( t );
-  t.liquidName = "Baccardi";
-  t.index = E_LiquidDeliverySystemIndex_2;
-  lookUpTable.push_back( t );
-  t.liquidName = "Cola";
-  t.index = E_LiquidDeliverySystemIndex_3;
-  lookUpTable.push_back( t );
+    for (int i = 0; i < E_LiquidDeliverySystemIndex_Invalid; i++)
+      {
+	lookUpTable.push_back( "" );
+      }
 }
 
 LiquidDeliverySystemIndex_e BottleManagement::GetLiquidStationIndex(std::string liquidName)
 {
   for (unsigned int i = 0u; i < lookUpTable.size( ); i++)
     {
-      if (liquidName.compare(lookUpTable[i].liquidName) == 0)
+      if (liquidName.compare(lookUpTable[i]) == 0)
 	{
-	  return lookUpTable[i].index;
+	  return (LiquidDeliverySystemIndex_e)i;
 	}
     }
   return E_LiquidDeliverySystemIndex_Invalid;
+}
+
+void BottleManagement::AssignBottleToLiquidStation(std::string liquidName, LiquidDeliverySystemIndex_e stationIndex)
+{
+  lookUpTable[stationIndex] = liquidName;
 }

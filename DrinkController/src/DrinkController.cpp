@@ -28,7 +28,9 @@ static void* CommandManager(void *)
   LiquidDeliverySystemIndex_e stationIndex;
   std::string liquidName; 
   LiquidDeliverySystem sps( "127.0.0.1", 1999u );
-
+  bm.AssignBottleToLiquidStation( "Baccardi", E_LiquidDeliverySystemIndex_1 );
+  bm.AssignBottleToLiquidStation( "Vodka", E_LiquidDeliverySystemIndex_2 );
+  bm.AssignBottleToLiquidStation( "Cola", E_LiquidDeliverySystemIndex_3 );
   //  for (;;)
     {
       /* Poll order */
