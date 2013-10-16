@@ -61,15 +61,16 @@ int UDP::OpenSocket(std::string ip, int port, ReceiveDataCallback_t receiveCallb
          hp->h_length);
    server.sin_port = htons(port);
    
-  return socketFileDescriptor;
+  socket_d = socketFileDescriptor;
+  return 0;
 }
 
 
-bool UDP::WriteData(int socketHandler, const char* pData, unsigned int numberOfData)
+bool UDP::WriteData(const char* pData, unsigned int numberOfData)
 {
   bool ret = false;
-  printf("Writing, handler %d, data %x, size %d\n",socketHandler, *pData, numberOfData);
-  if(-1 == sendto(socketHandler,pData,numberOfData,0,(const struct sockaddr *)&server,sizeof(struct sockaddr_in))){    
+  printf("Writing, handler %d, data %x, size %d\n",socket_d, *pData, numberOfData);
+  if(-1 == sendto(socket_d,pData,numberOfData,0,(const struct sockaddr *)&server,sizeof(struct sockaddr_in))){    
       fprintf(stderr, "Write failed %s\n", strerror(errno));
   }
   return ret;
@@ -84,21 +85,13 @@ static void* UDPReceiveHandler(void* pArg)
   struct sockaddr_in addr;
   char buffer[1500];
   int numberOfBytesRead;
-
-  bzero( (char *) &addr, sizeof( addr ) );
-  addr.sin_family = AF_INET;
-  addr.sin_port = htons( pData->port );
-  bcopy( (char *)pData->ip.c_str(),
-	 (char *)&addr.sin_addr.s_addr,
-	 pData->ip.length( ) );
   
   for (;;)
     {
-      numberOfBytesRead = read( pData->socketFileDescriptor, buffer, 1500 );
-      if ((numberOfBytesRead != 0) && (pData->receiveCallback != NULL))
-	    {
-	        pData->receiveCallback( buffer, numberOfBytesRead );
-	    } 
+      //numberOfBytesRead = read( pData->socketFileDescriptor, buffer, 1500 );
+
+      //recvfrom(socket, buffer, size, 0, (struct sockaddr*)&from, &length);
+       sleep(1u); 
     }
   return NULL;
 }

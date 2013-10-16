@@ -14,12 +14,11 @@ typedef struct
   int socketFileDescriptor;
   struct from;
 
-
 } UDPWorkingData_t;
 
 
 
-class UDP : public SCFSocket
+class UDP 
 {
  public:
   /** Function opens the socket and listens on the port.
@@ -27,12 +26,14 @@ class UDP : public SCFSocket
   int OpenSocket(std::string ip, int port, ReceiveDataCallback_t receiveCallback);
 
   /** Write data to socket **/
-  bool WriteData(int socketHandler, const char* pData, unsigned int numberOfData);
+  bool WriteData(const char* pData, unsigned int numberOfData);
   virtual ~UDP();
  private:
     /* Variables */
   pthread_t threadId;
   struct sockaddr_in server;
+
+  int socket_d;
 };
 
 #endif

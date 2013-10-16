@@ -4,16 +4,16 @@
 static void receiveCallback(char* a, unsigned int b);
 void MicroControllerCommunication::SendGetVersion(void){
    char command[4] = {0,0,0,1};
-   udp->WriteData(socket,command,4);
+   udp->WriteData(command,4);
 }
 void MicroControllerCommunication::SendDeliverIceCube(char amount){
-    char command[4] = {0,0,0,4};
-    udp->WriteData(socket,command,4);
+    char command[5] = {0,0,0,4,0};
+    command[4] = amount;
+    udp->WriteData(command,5);
 }
 void MicroControllerCommunication::SendSetLEDtext(char* text){
     char command[4] = {0,0,0,4};
-    udp->WriteData(socket,command,4);
-   
+    udp->WriteData(command,4);
 }
 void MicroControllerCommunication::SendLEDControl(char controlRegister){
 
@@ -33,11 +33,5 @@ MicroControllerCommunication::MicroControllerCommunication(){
 
 MicroControllerCommunication::~MicroControllerCommunication(){
     delete(udp);
-
 }
-
-
-
-
-
 
