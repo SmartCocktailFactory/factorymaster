@@ -3,6 +3,7 @@
 #include "../inc/BottleManagement.h"
 #include "../inc/LiquidDeliverySystem.h"
 #include <stdio.h>
+#include "../inc/MicroControllerCommunication.h"
 
 /** Local function prototype **/
 static void* CommandManager(void *);
@@ -26,13 +27,13 @@ static void* CommandManager(void *)
   LiquidDeliverySystemIndex_e stationIndex;
   std::string liquidName; 
   LiquidDeliverySystem sps( "192.168.1.20", 1000u );
-
+  MicroControllerCommunication uCCom;
   //  for (;;)
     {
       /* Poll order */
 
       /* Ice necessary */
-
+      uCCom.SendDeliverIceCube(3);
 
       /* Look up bottles */
       liquidName = "Baccardi";
