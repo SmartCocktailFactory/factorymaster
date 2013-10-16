@@ -1,5 +1,5 @@
-#ifndef _TCP_
-#define _TCP_
+#ifndef _UDP_
+#define _UDP_
 
 /** Includes **/
 #include <pthread.h>

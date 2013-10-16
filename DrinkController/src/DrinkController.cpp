@@ -4,9 +4,10 @@
 #include "../inc/DrinkController.h"
 #include "../inc/BottleManagement.h"
 #include "../inc/LiquidDeliverySystem.h"
+#include "../inc/com.h"
+#include "../inc/MicroControllerCommunication.h"
 #include <stdio.h>
 #include <unistd.h>
-#include "../inc/MicroControllerCommunication.h"
 
 /** Local function prototype **/
 static void* CommandManager(void *);
@@ -52,7 +53,7 @@ static void* CommandManager(void *)
 	  /* Ice necessary */
 	  if (HaveToDeliverIceCubes( &order ))
 	    {
-		   ucCom.SendDeliveryIceCube( 1u );
+	      uCCom.SendDeliverIceCube( 1u );
 	      fprintf( stderr, "Order:%d with ice\n", order.orderId );
 	    }
 	  else
