@@ -50,7 +50,7 @@ void LiquidDeliverySystem::WaitForGlass()
     DWORD status = GetStatus();
     if (status != EVENT_READY)
     {
-        fprintf( stderr, "No Glass available" );
+        fprintf( stderr, "No Glass available \n" );
     }
     while (status != EVENT_READY)
     {
@@ -61,7 +61,7 @@ void LiquidDeliverySystem::WaitForGlass()
         status = GetStatus();
         sleep( 1u );
     }
-    fprintf( stderr, "Glass available" );
+    fprintf( stderr, "Glass available \n" );
 }
 
 void LiquidDeliverySystem::WaitClassRemoved( )
@@ -70,7 +70,7 @@ void LiquidDeliverySystem::WaitClassRemoved( )
 
     if (status != EVENT_NOT_READY)
     {
-        fprintf( stderr, "Please remove the glass" );
+        fprintf( stderr, "Please remove the glass \n" );
     }
     while (status != EVENT_NOT_READY)
     {
@@ -81,7 +81,7 @@ void LiquidDeliverySystem::WaitClassRemoved( )
         status = GetStatus();
         sleep( 1u );
     }
-    fprintf( stderr, "Glass removed" );
+    fprintf( stderr, "Glass removed \n" );
 }
 
 bool LiquidDeliverySystem::CheckDeliveryDoneSuccessfull( )
@@ -105,7 +105,7 @@ void LiquidDeliverySystem::AckError()
     SPSConverter sps;
     sps.ConvertIntoSendCommand( METHOD_PUT, KEY_Command, CMD_ERROR_ACK, &frame );
     pSpsConnection->WriteData( spsHandlerId, (char*) &frame, sizeof(frame) );
-    fprintf( stderr, "Ack error... " );
+    fprintf( stderr, "Ack error... \n" );
     WaitForCmdAccepted( METHOD_RESPONSE, KEY_Command );
 }
 
@@ -115,7 +115,7 @@ void LiquidDeliverySystem::StartDeliver( )
     SPSConverter sps;
     sps.ConvertIntoSendCommand( METHOD_PUT, KEY_Command, CMD_DELIVER, &frame );
     pSpsConnection->WriteData( spsHandlerId, (char*) &frame, sizeof(frame) );
-    fprintf( stderr, "Start deliver... " );
+    fprintf( stderr, "Start deliver... \n" );
     WaitForCmdAccepted( METHOD_RESPONSE, KEY_Command );
 }
 
@@ -135,7 +135,7 @@ void LiquidDeliverySystem::PrepareforNextTransfer( )
     SPSConverter sps;
     sps.ConvertIntoSendCommand( METHOD_PUT, KEY_Command, CMD_PREPARE_FOR_NEXT_DRINK, &frame );
     pSpsConnection->WriteData( spsHandlerId, (char*) &frame, sizeof(frame) );
-    fprintf( stderr, "Prepare for next transfer" );
+    fprintf( stderr, "Prepare for next transfer \n" );
     WaitForCmdAccepted( METHOD_RESPONSE, KEY_Command );
 }
 
@@ -145,7 +145,7 @@ void LiquidDeliverySystem::UpdateStationId(LiquidDeliverySystemIndex_e id)
     SPSConverter sps;
     sps.ConvertIntoSendCommand( METHOD_PUT, KEY_StationID, id + 1, &frame );
     pSpsConnection->WriteData( spsHandlerId, (char*) &frame, sizeof(frame) );
-    fprintf( stderr, "Set station" );
+    fprintf( stderr, "Set station \n" );
     WaitForCmdAccepted( METHOD_RESPONSE, KEY_StationID );
 }
 
@@ -155,7 +155,7 @@ void LiquidDeliverySystem::UpdateVolume(unsigned int volumeToDeliverInMl)
     SPSConverter sps;
     sps.ConvertIntoSendCommand( METHOD_PUT, KEY_Volume, volumeToDeliverInMl, &frame );
     pSpsConnection->WriteData( spsHandlerId, (char*) &frame, sizeof(frame) );
-    fprintf( stderr, "Set volume" );
+    fprintf( stderr, "Set volume \n" );
     WaitForCmdAccepted( METHOD_RESPONSE, KEY_Volume );
 }
 
