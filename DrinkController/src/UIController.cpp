@@ -96,6 +96,7 @@ void UIController::UpdateAllLamps(HueColor_e color, int saturation, int brightne
     for (int i = (int)E_LiquidDeliverySystemIndex_1;
          i < (int)E_LiquidDeliverySystemIndex_Invalid; i++)
     {
-        UpdateLamp( (LiquidDeliverySystemIndex_e)i, color, saturation, brightness );
+        UpdateLamp( (LiquidDeliverySystemIndex_e)(i + 1),
+                    color, saturation, brightness );
     } 
 }
