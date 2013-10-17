@@ -22,7 +22,7 @@
     Local function prototypes
 *************************************************************/
 static void* CommandManager(void *);
-static bool HaveToDeliverIceCubes(Order_t* pOrder);
+static unsigned int NumberIceCubesToDeliver(Order_t* pOrder);
 
 /************************************************************
     Public functions 
@@ -48,20 +48,19 @@ int DrinkController::WaitForKill( )
 /************************************************************
     Local functions
 *************************************************************/
-
-static bool HaveToDeliverIceCubes(Order_t* pOrder)
+static unsigned int NumberIceCubesToDeliver(Order_t* pOrder)
 {
-    bool iceNecessary = false;
+    unsigned int nr = 0u;
     for (unsigned int i = 0u; i < pOrder->ingredients.size( ); i++)
     {
         if (pOrder->ingredients[i].name == "IceCube")
         {
-            iceNecessary = true;
+            nr = pOrder->ingredients[i].amount;
             pOrder->ingredients.erase( pOrder->ingredients.begin() + i );
             break;
         }
     }
-    return iceNecessary;
+    return nr;
 }
 
 static void* CommandManager(void *)
@@ -72,11 +71,12 @@ static void* CommandManager(void *)
     LiquidDeliverySystem sps( "192.168.1.120", 200u );
     Com communicationInterface;
     Order_t order;
-  
+    unsigned int numberIceCubes;
+    
     communicationInterface.init( );
-    bm.AssignBottleToLiquidStation( "Rum", E_LiquidDeliverySystemIndex_1, 700u );
+    bm.AssignBottleToLiquidStation( "Bacardi", E_LiquidDeliverySystemIndex_1, 700u );
     bm.AssignBottleToLiquidStation( "Vodka", E_LiquidDeliverySystemIndex_2, 700u );
-    bm.AssignBottleToLiquidStation( "Cola", E_LiquidDeliverySystemIndex_3, 700u );
+    bm.AssignBottleToLiquidStation( "OrangeJuice", E_LiquidDeliverySystemIndex_3, 700u );
 
     MicroControllerCommunication uCCom;
     for (;;)
@@ -90,10 +90,11 @@ static void* CommandManager(void *)
             fprintf( stderr, "New order:%d \n", order.orderId );
 
             /* Ice necessary */
-            if (HaveToDeliverIceCubes( &order ))
+            numberIceCubes = NumberIceCubesToDeliver( &order );
+            if (numberIceCubes != 0u)
             {
-                uCCom.SendDeliverIceCube( 1u );
-                fprintf( stderr, "Order:%d with ice\n", order.orderId );
+                uCCom.SendDeliverIceCube( numberIceCubes );
+                fprintf( stderr, "Order:%d with %d ice cubes\n", order.orderId, numberIceCubes );
             }
             else
             {
@@ -115,7 +116,8 @@ static void* CommandManager(void *)
                 bm.UpdateFillLevel( stationIndex, order.ingredients[i].amount );
                 /* Wait delivery done */
                 
-                fprintf( stderr, "Delivery finished %d..", (int) sps.CheckDeliveryDoneSuccessfull( ));
+                fprintf( stderr, "Delivery %s finished %d..", liquidName.c_str( ),
+                         (int) sps.CheckDeliveryDoneSuccessfull( ));
             }
             /* Push finishing */
             communicationInterface.respondDone(order.orderId );
