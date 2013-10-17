@@ -75,7 +75,8 @@ static void* CommandManager(void *)
     pBm->AssignBottleToLiquidStation( "OrangeJuice", E_LiquidDeliverySystemIndex_1, 700u );
     pBm->AssignBottleToLiquidStation( "Bacardi", E_LiquidDeliverySystemIndex_2, 700u );
     pBm->AssignBottleToLiquidStation( "Vodka", E_LiquidDeliverySystemIndex_3, 700u );
-
+    fprintf( stderr, "SCF starting... \n"  );
+            
     for (;;)
     {
         /* Poll order */
