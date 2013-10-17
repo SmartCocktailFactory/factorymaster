@@ -31,37 +31,40 @@ UIController::UIController( )
 
 void UIController::UpdateGlobalState(UIGlobalState_e newState)
 {
-    switch (newState)
+    if (globalState != newState)
     {
-        case E_UIState_Unknown:
-            UpdateAllLamps( E_HueColor_Purple, 255, 50 );
-            break;
+        switch (newState)
+        {
+            case E_UIState_Unknown:
+                UpdateAllLamps( E_HueColor_Purple, 255, 50 );
+                break;
+                
+            case E_UIState_Alarm:
+                UpdateAllLamps( E_HueColor_Red, 255, 50 );
+                break;
+                
+            case E_UIState_Delivering:
+                UpdateAllLamps( E_HueColor_Yellow, 255, 50 );
+                break;
+                
+            case E_UIState_DeliveringDone:
+                UpdateAllLamps( E_HueColor_Green, 255, 50 );
+                break;
             
-        case E_UIState_Alarm:
-            UpdateAllLamps( E_HueColor_Red, 255, 50 );
-            break;
+            case E_UIState_WaitingForOrder:
+                UpdateAllLamps( E_HueColor_Cyan, 255, 50 );
+                break;
             
-        case E_UIState_Delivering:
-            UpdateAllLamps( E_HueColor_Yellow, 255, 50 );
-            break;
-            
-        case E_UIState_DeliveringDone:
-            UpdateAllLamps( E_HueColor_Green, 255, 50 );
-            break;
-            
-        case E_UIState_WaitingForOrder:
-            UpdateAllLamps( E_HueColor_Cyan, 255, 50 );
-            break;
-            
-        case E_UIState_Starting:
-            UpdateAllLamps( E_HueColor_Blue, 255, 50 );
-            
-            break;
-        case E_UIState_GlassMissing:
-            UpdateAllLamps( E_HueColor_Orange, 255, 50 );
-            break;
+            case E_UIState_Starting:
+                UpdateAllLamps( E_HueColor_Blue, 255, 50 );
+                
+                break;
+            case E_UIState_GlassMissing:
+                UpdateAllLamps( E_HueColor_Orange, 255, 50 );
+                break;
+        }
+        globalState = newState;
     }
-    globalState = newState;
 }
 
 void UIController::UpdateBottleState(LiquidDeliverySystemIndex_e index, UIBottleState_e newState)
