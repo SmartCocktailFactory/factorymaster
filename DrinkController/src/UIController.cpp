@@ -34,7 +34,7 @@ void UIController::UpdateGlobalState(UIGlobalState_e newState)
     switch (newState)
     {
         case E_UIState_Unknown:
-            UpdateAllLamps( E_HueColor_Cyan, 255, 50 );
+            UpdateAllLamps( E_HueColor_Purple, 255, 50 );
             break;
             
         case E_UIState_Alarm:
@@ -50,7 +50,7 @@ void UIController::UpdateGlobalState(UIGlobalState_e newState)
             break;
             
         case E_UIState_WaitingForOrder:
-            UpdateAllLamps( E_HueColor_Green, 255, 50 );
+            UpdateAllLamps( E_HueColor_Cyan, 255, 50 );
             break;
             
         case E_UIState_Starting:

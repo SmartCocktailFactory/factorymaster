@@ -66,7 +66,8 @@ class UIController
         E_HueColor_Yellow = 10922,
         E_HueColor_Green = 29120,
         E_HueColor_Blue = 43690,
-        E_HueColor_Orange = 5500
+        E_HueColor_Orange = 5500,
+        E_HueColor_Purple = 60000
     } HueColor_e;
     
     static UIController *instanz;
