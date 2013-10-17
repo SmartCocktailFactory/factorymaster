@@ -58,3 +58,14 @@ void BottleManagement::UpdateFillLevel(LiquidDeliverySystemIndex_e stationIndex,
         lookUpTable[stationIndex].fillLevel -= deliveredLiquidInMl;
     }
 }
+
+bool BottleManagement::DeliveryPossible(LiquidDeliverySystemIndex_e stationIndex,
+                                       unsigned int liquidInMlToDeliver)
+{
+    bool ret = false;
+    if (lookUpTable[stationIndex].fillLevel > liquidInMlToDeliver)
+    {
+        ret = true;
+    }
+    return ret;
+}

@@ -23,6 +23,8 @@
 *************************************************************/
 static void* CommandManager(void *);
 static unsigned int NumberIceCubesToDeliver(Order_t* pOrder);
+static void ProcessOrder(Order_t* pOrder, BottleManagement* pBM,
+                         Com* pCom);
 
 /************************************************************
     Public functions 
@@ -66,13 +68,8 @@ static unsigned int NumberIceCubesToDeliver(Order_t* pOrder)
 static void* CommandManager(void *)
 {
     BottleManagement bm;
-    LiquidDeliverySystemIndex_e stationIndex;
-    std::string liquidName; 
-    LiquidDeliverySystem sps( "192.168.1.120", 200u );
     Com communicationInterface;
     Order_t order;
-    unsigned int numberIceCubes;
-    MicroControllerCommunication uCCom;
     
     communicationInterface.init( );
     bm.AssignBottleToLiquidStation( "OrangeJuice", E_LiquidDeliverySystemIndex_1, 700u );
@@ -87,42 +84,7 @@ static void* CommandManager(void *)
         communicationInterface.getOrder( &order );
         if (order.orderId != 0)
         {
-            fprintf( stderr, "New order:%d \n", order.orderId );
-
-            /* Ice necessary */
-            numberIceCubes = NumberIceCubesToDeliver( &order );
-            if (numberIceCubes != 0u)
-            {
-                uCCom.SendDeliverIceCube( numberIceCubes );
-                fprintf( stderr, "Order:%d with %d ice cubes\n", order.orderId, numberIceCubes );
-            }
-            else
-            {
-                fprintf( stderr, "Order:%d no ice\n", order.orderId );
-            }
-            /* Deliver all liquids. */
-            for (unsigned int i = 0u; i < order.ingredients.size( ); i++)
-            {
-                /* Look up bottles */
-                liquidName = order.ingredients[i].name;
-                stationIndex = bm.GetLiquidStationIndex( liquidName );
-                fprintf( stderr, "Index:%d name:%s amount:%d\n", stationIndex, liquidName.c_str( ),
-                         order.ingredients[i].amount );
-                
-                /* Deliver liquid*/
-                fprintf( stderr, "Delivery started..\n" );
-                
-                sps.DeliverVolume( stationIndex, order.ingredients[i].amount );
-                bm.UpdateFillLevel( stationIndex, order.ingredients[i].amount );
-                /* Wait delivery done */
-                
-                fprintf( stderr, "Delivery %s finished %d..\n", liquidName.c_str( ),
-                         (int) sps.CheckDeliveryDoneSuccessfull( ));
-            }
-            /* Push finishing */
-            communicationInterface.respondDone(order.orderId );
-            /* Wait glass removed */
-            sps.WaitClassRemoved( );
+            ProcessOrder( &order, &bm, &communicationInterface );
         }
         else
         {
@@ -131,4 +93,58 @@ static void* CommandManager(void *)
         }
     }
     return NULL;
+}
+
+static void ProcessOrder(Order_t* pOrder, BottleManagement* pBM, Com* pCom)
+{
+    LiquidDeliverySystem sps( "192.168.1.120", 200u );
+    unsigned int numberIceCubes;
+    MicroControllerCommunication uCCom;
+    LiquidDeliverySystemIndex_e stationIndex;
+    std::string liquidName; 
+    
+    fprintf( stderr, "New order:%d \n", pOrder->orderId );
+
+    /* Ice necessary */
+    numberIceCubes = NumberIceCubesToDeliver( pOrder );
+    if (numberIceCubes != 0u)
+    {
+        uCCom.SendDeliverIceCube( numberIceCubes );
+        fprintf( stderr, "Order:%d with %d ice cubes\n", pOrder->orderId, numberIceCubes );
+    }
+    else
+    {
+        fprintf( stderr, "Order:%d no ice\n", pOrder->orderId );
+    }
+    /* Deliver all liquids. */
+    for (unsigned int i = 0u; i < pOrder->ingredients.size( ); i++)
+    {
+        /* Look up bottles */
+        liquidName = pOrder->ingredients[i].name;
+        stationIndex = pBM->GetLiquidStationIndex( liquidName );
+        fprintf( stderr, "Index:%d name:%s amount:%d\n", stationIndex, liquidName.c_str( ),
+                 pOrder->ingredients[i].amount );
+        
+        /* Check delivering */
+        if (!pBM->DeliveryPossible( stationIndex, pOrder->ingredients[i].amount ))
+        {
+            /* TODO: Wait for change */
+            fprintf( stderr, "Please change bottle:%d %s \n", stationIndex,
+                     pOrder->ingredients[i].name.c_str( ));
+        }
+        
+        /* Deliver liquid*/
+        fprintf( stderr, "Delivery started..\n" );
+        
+        sps.DeliverVolume( stationIndex, pOrder->ingredients[i].amount );
+        pBM->UpdateFillLevel( stationIndex, pOrder->ingredients[i].amount );
+        /* Wait delivery done */
+        
+        fprintf( stderr, "Delivery %s finished %d..\n", liquidName.c_str( ),
+                 (int) sps.CheckDeliveryDoneSuccessfull( ));
+    }
+    /* Push finishing */
+    pCom->respondDone( pOrder->orderId );
+    /* Wait glass removed */
+    sps.WaitClassRemoved( );
 }
