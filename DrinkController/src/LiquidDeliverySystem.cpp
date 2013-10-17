@@ -3,6 +3,7 @@
 *************************************************************/
 #include "../inc/LiquidDeliverySystem.h"
 #include "../inc/SPSConverter.h"
+#include "../inc/UIController.h"
 #include <unistd.h>
 #include <stdio.h>
 
@@ -51,7 +52,9 @@ void LiquidDeliverySystem::WaitForGlass()
     DWORD status = GetStatus();
     if (status != EVENT_READY)
     {
+        UIController* pUIController = UIController::GetInstance( );
         fprintf( stderr, "No Glass available \n" );
+        pUIController->UpdateGlobalState( E_UIState_GlassMissing );
     }
     while (status != EVENT_READY)
     {
