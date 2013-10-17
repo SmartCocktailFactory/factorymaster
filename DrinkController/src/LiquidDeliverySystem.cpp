@@ -48,13 +48,13 @@ void LiquidDeliverySystem::DeliverVolume(LiquidDeliverySystemIndex_e stationId,
 void LiquidDeliverySystem::WaitForGlass()
 {
     DWORD status = GetStatus();
-    if (status != 1u)
+    if (status != EVENT_READY)
     {
         fprintf( stderr, "No Glass available" );
     }
-    while (status != 1u /*Ready*/)
+    while (status != EVENT_READY)
     {
-        if (status == 4u /* Error */)
+        if (status == EVENT_ERROR)
         {
             AckError();
         }
@@ -68,13 +68,13 @@ void LiquidDeliverySystem::WaitClassRemoved( )
 {
     DWORD status = GetStatus();
 
-    if (status != 0u)
+    if (status != EVENT_NOT_READY)
     {
         fprintf( stderr, "Please remove the glass" );
     }
-    while (status != 0u /*Not Ready*/)
+    while (status != EVENT_NOT_READY)
     {
-        if (status == 4u /* Error */)
+        if (status == EVENT_ERROR)
         {
             AckError();
         }
@@ -88,11 +88,11 @@ bool LiquidDeliverySystem::CheckDeliveryDoneSuccessfull( )
 {
     DWORD status = GetStatus();
     bool ret = false;
-    while ((status != 1u /*Ready*/) && (status != 4u /*Error*/))
+    while ((status != EVENT_READY) && (status != EVENT_ERROR))
     {
         status = GetStatus();
     }
-    if (status == 4u)
+    if (status == EVENT_ERROR)
     {
         ret = false;
     }
