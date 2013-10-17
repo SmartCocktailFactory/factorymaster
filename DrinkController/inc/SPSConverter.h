@@ -24,11 +24,11 @@
 #define CMD_ERROR_ACK 2
 #define CMD_PREPARE_FOR_NEXT_DRINK 3
 
-#define EVENT_NOT_READY 0
-#define EVENT_READY 1
-#define EVENT_PREFILLING 2
-#define EVENT_DELIVER_LIQUID 3
-#define EVENT_ERROR 4
+#define EVENT_NOT_READY 0u
+#define EVENT_READY 1u
+#define EVENT_PREFILLING 2u
+#define EVENT_DELIVER_LIQUID 3u
+#define EVENT_ERROR 4u
 
 /************************************************************
     Types

@@ -110,13 +110,13 @@ static void* CommandManager(void *)
                          order.ingredients[i].amount );
                 
                 /* Deliver liquid*/
-                fprintf( stderr, "Delivery started.." );
+                fprintf( stderr, "Delivery started..\n" );
                 
                 sps.DeliverVolume( stationIndex, order.ingredients[i].amount );
                 bm.UpdateFillLevel( stationIndex, order.ingredients[i].amount );
                 /* Wait delivery done */
                 
-                fprintf( stderr, "Delivery %s finished %d..", liquidName.c_str( ),
+                fprintf( stderr, "Delivery %s finished %d..\n", liquidName.c_str( ),
                          (int) sps.CheckDeliveryDoneSuccessfull( ));
             }
             /* Push finishing */
