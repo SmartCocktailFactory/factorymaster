@@ -76,7 +76,7 @@ void LiquidDeliverySystem::WaitClassRemoved( )
         status = GetStatus();
         sleep( 1u );
     }
-    fprintf( stderr, "Glass available" );
+    fprintf( stderr, "Glass removed" );
 }
 
 bool LiquidDeliverySystem::CheckDeliveryDoneSuccessfull( )

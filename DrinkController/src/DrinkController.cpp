@@ -74,15 +74,16 @@ static void* CommandManager(void *)
     Order_t order;
   
     communicationInterface.init( );
-    bm.AssignBottleToLiquidStation( "Rum", E_LiquidDeliverySystemIndex_1 );
-    bm.AssignBottleToLiquidStation( "Vodka", E_LiquidDeliverySystemIndex_2 );
-    bm.AssignBottleToLiquidStation( "Cola", E_LiquidDeliverySystemIndex_3 );
+    bm.AssignBottleToLiquidStation( "Rum", E_LiquidDeliverySystemIndex_1, 700u );
+    bm.AssignBottleToLiquidStation( "Vodka", E_LiquidDeliverySystemIndex_2, 700u );
+    bm.AssignBottleToLiquidStation( "Cola", E_LiquidDeliverySystemIndex_3, 700u );
 
     MicroControllerCommunication uCCom;
     for (;;)
     {
         /* Poll order */
         order.orderId = 0;
+        order.ingredients.clear();
         communicationInterface.getOrder( &order );
         if (order.orderId != 0)
         {
@@ -111,6 +112,7 @@ static void* CommandManager(void *)
                 fprintf( stderr, "Delivery started.." );
                 
                 sps.DeliverVolume( stationIndex, order.ingredients[i].amount );
+                bm.UpdateFillLevel( stationIndex, order.ingredients[i].amount );
                 /* Wait delivery done */
                 
                 fprintf( stderr, "Delivery finished %d..", (int) sps.CheckDeliveryDoneSuccessfull( ));
