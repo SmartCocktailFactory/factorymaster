@@ -7,25 +7,28 @@
 #include <pthread.h>
 #include "SCFSocket.h"
 
+/************************************************************
+    Class definition
+*************************************************************/
+
 class TCP : public SCFSocket
 {
  public:
-  virtual ~TCP( );
+    virtual ~TCP( );
 
-  /** Function opens the socket and listens on the port.
-      @return The socketHandler.*/
-  int OpenSocket(std::string ip, int port, ReceiveDataCallback_t receiveCallback);
+    /** Function opens the socket and listens on the port.
+        @return The socketHandler.*/
+    int OpenSocket(std::string ip, int port, ReceiveDataCallback_t receiveCallback);
 
-  /** Write data to socket **/
-  bool WriteData(int socketHandler, const char* pData, unsigned int numberOfData);
+    /** Write data to socket **/
+    bool WriteData(int socketHandler, const char* pData, unsigned int numberOfData);
 
-  /** Wait untill the connection is established. */
-  void WaitUntillConnected( );
+    /** Wait untill the connection is established. */
+    void WaitUntillConnected( );
 
  private:
     /* Variables */
-  pthread_t threadId;
-
+    pthread_t threadId;
 };
 
 #endif

@@ -1,22 +1,26 @@
 #ifndef _DRINK_CONTROLLER_H_
 #define _DRINK_CONTROLLER_H_
 
-/** Includes **/
+/************************************************************
+    Includes
+*************************************************************/
 #include <pthread.h>
 
-/** Class definition **/
+/************************************************************
+    Class definition
+*************************************************************/
+
 class DrinkController
 {
  public:
-  DrinkController( );
-  int WaitForKill( );
+    DrinkController( );
+    int WaitForKill( );
   
  private:
+    /* Variables */
+    pthread_t threadId;
 
-  /* Variables */
-  pthread_t threadId;
-
-  /* Functions */
+    /* Functions */
 };
 
 #endif
