@@ -25,14 +25,27 @@ enum LiquidDeliverySystemIndex_e
 class LiquidDeliverySystem
 {
  public:
-    LiquidDeliverySystem(std::string ip, unsigned int port);
+    static LiquidDeliverySystem* GetInstance(std::string ip, unsigned int port)
+    {
+        if (instanz == NULL)
+        {
+            instanz = new LiquidDeliverySystem( ip, port );
+        }
+        return instanz;
+    }
+
     void DeliverVolume(LiquidDeliverySystemIndex_e stationId, unsigned int volumeToDeliverInMl);
     bool CheckDeliveryDoneSuccessfull( );
     void WaitClassRemoved();
-    
+
+ protected:
+    LiquidDeliverySystem(std::string ip, unsigned int port);
+        
  private:
     TCP* pSpsConnection;
     int spsHandlerId;
+    static LiquidDeliverySystem *instanz;
+    
     void UpdateStationId(LiquidDeliverySystemIndex_e id);
     void UpdateVolume(unsigned int volumeToDeliverInMl);
     bool WaitForCmdAccepted(unsigned int method, unsigned int key);

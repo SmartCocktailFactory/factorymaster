@@ -24,15 +24,26 @@ typedef struct
 class BottleManagement
 {
  public:
-    BottleManagement( );
+    static BottleManagement* GetInstance()
+    {
+        if (instanz == NULL)
+        {
+            instanz = new BottleManagement( );
+        }
+        return instanz;
+    }
     LiquidDeliverySystemIndex_e GetLiquidStationIndex(std::string liquidName);
     void AssignBottleToLiquidStation(std::string liquidName, LiquidDeliverySystemIndex_e stationIndex,
                                      unsigned int fillLevelInMl);
     void UpdateFillLevel(LiquidDeliverySystemIndex_e stationIndex, unsigned int deliveredLiquidInMl);
     bool DeliveryPossible(LiquidDeliverySystemIndex_e stationIndex, unsigned int liquidInMlToDeliver);
+
+ protected:
+    BottleManagement( );
     
  private:
-    std::vector<BottleData_t> lookUpTable;    
+    std::vector<BottleData_t> lookUpTable;
+    static BottleManagement *instanz;
 };
 
 #endif

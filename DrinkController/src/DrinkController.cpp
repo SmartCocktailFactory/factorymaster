@@ -23,7 +23,7 @@
 *************************************************************/
 static void* CommandManager(void *);
 static unsigned int NumberIceCubesToDeliver(Order_t* pOrder);
-static void ProcessOrder(Order_t* pOrder, BottleManagement* pBM,
+static void ProcessOrder(Order_t* pOrder,
                          Com* pCom);
 
 /************************************************************
@@ -67,14 +67,14 @@ static unsigned int NumberIceCubesToDeliver(Order_t* pOrder)
 
 static void* CommandManager(void *)
 {
-    BottleManagement bm;
+    BottleManagement* pBm = BottleManagement::GetInstance( );
     Com communicationInterface;
     Order_t order;
     
     communicationInterface.init( );
-    bm.AssignBottleToLiquidStation( "OrangeJuice", E_LiquidDeliverySystemIndex_1, 700u );
-    bm.AssignBottleToLiquidStation( "Bacardi", E_LiquidDeliverySystemIndex_2, 700u );
-    bm.AssignBottleToLiquidStation( "Vodka", E_LiquidDeliverySystemIndex_3, 700u );
+    pBm->AssignBottleToLiquidStation( "OrangeJuice", E_LiquidDeliverySystemIndex_1, 700u );
+    pBm->AssignBottleToLiquidStation( "Bacardi", E_LiquidDeliverySystemIndex_2, 700u );
+    pBm->AssignBottleToLiquidStation( "Vodka", E_LiquidDeliverySystemIndex_3, 700u );
 
     for (;;)
     {
@@ -84,7 +84,7 @@ static void* CommandManager(void *)
         communicationInterface.getOrder( &order );
         if (order.orderId != 0)
         {
-            ProcessOrder( &order, &bm, &communicationInterface );
+            ProcessOrder( &order, &communicationInterface );
         }
         else
         {
@@ -95,9 +95,10 @@ static void* CommandManager(void *)
     return NULL;
 }
 
-static void ProcessOrder(Order_t* pOrder, BottleManagement* pBM, Com* pCom)
+static void ProcessOrder(Order_t* pOrder, Com* pCom)
 {
-    LiquidDeliverySystem sps( "192.168.1.120", 200u );
+    BottleManagement* pBM = BottleManagement::GetInstance( );
+    LiquidDeliverySystem* pLiquidDeliverySystem = LiquidDeliverySystem::GetInstance( "192.168.1.120", 200u );
     unsigned int numberIceCubes;
     MicroControllerCommunication uCCom;
     LiquidDeliverySystemIndex_e stationIndex;
@@ -136,15 +137,15 @@ static void ProcessOrder(Order_t* pOrder, BottleManagement* pBM, Com* pCom)
         /* Deliver liquid*/
         fprintf( stderr, "Delivery started..\n" );
         
-        sps.DeliverVolume( stationIndex, pOrder->ingredients[i].amount );
+        pLiquidDeliverySystem->DeliverVolume( stationIndex, pOrder->ingredients[i].amount );
         pBM->UpdateFillLevel( stationIndex, pOrder->ingredients[i].amount );
         /* Wait delivery done */
         
         fprintf( stderr, "Delivery %s finished %d..\n", liquidName.c_str( ),
-                 (int) sps.CheckDeliveryDoneSuccessfull( ));
+                 (int) pLiquidDeliverySystem->CheckDeliveryDoneSuccessfull( ));
     }
     /* Push finishing */
     pCom->respondDone( pOrder->orderId );
     /* Wait glass removed */
-    sps.WaitClassRemoved( );
+    pLiquidDeliverySystem->WaitClassRemoved( );
 }

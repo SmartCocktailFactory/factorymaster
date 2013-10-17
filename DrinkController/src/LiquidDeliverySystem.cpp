@@ -18,6 +18,7 @@ static pthread_cond_t S_count_threshold_cv;
 static unsigned int S_waitingMethod;
 static unsigned int S_waitingKey;
 static unsigned int S_waitingValue;
+LiquidDeliverySystem* LiquidDeliverySystem::instanz = NULL;
 
 /************************************************************
     Local function prototypes
