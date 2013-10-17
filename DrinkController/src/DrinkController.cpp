@@ -72,13 +72,13 @@ static void* CommandManager(void *)
     Com communicationInterface;
     Order_t order;
     unsigned int numberIceCubes;
+    MicroControllerCommunication uCCom;
     
     communicationInterface.init( );
-    bm.AssignBottleToLiquidStation( "Bacardi", E_LiquidDeliverySystemIndex_1, 700u );
-    bm.AssignBottleToLiquidStation( "Vodka", E_LiquidDeliverySystemIndex_2, 700u );
-    bm.AssignBottleToLiquidStation( "OrangeJuice", E_LiquidDeliverySystemIndex_3, 700u );
+    bm.AssignBottleToLiquidStation( "OrangeJuice", E_LiquidDeliverySystemIndex_1, 700u );
+    bm.AssignBottleToLiquidStation( "Bacardi", E_LiquidDeliverySystemIndex_2, 700u );
+    bm.AssignBottleToLiquidStation( "Vodka", E_LiquidDeliverySystemIndex_3, 700u );
 
-    MicroControllerCommunication uCCom;
     for (;;)
     {
         /* Poll order */
