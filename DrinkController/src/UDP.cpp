@@ -94,16 +94,23 @@ static void* UDPReceiveHandler(void* pArg)
   UDPWorkingData_t* pData = (UDPWorkingData_t*) pArg;
   //struct sockaddr_in addr;
   char buffer[1500];
-  //int numberOfBytesRead;
+  int numberOfBytesRead;
   int status = 0;
+  int j;
   socklen_t length; 
   for (;;)
     {
       //numberOfBytesRead = read( pData->socketFileDescriptor, buffer, 1500 );
-
-       if (0 != recvfrom(pData->socketFileDescriptor, buffer, 1500, 0, (struct sockaddr*)&(pData->from), &length))
+        errno = 0;
+        numberOfBytesRead = recvfrom(pData->socketFileDescriptor, buffer, 1500, 0, (struct sockaddr*)&(pData->from), &length);
+        printf("length %d\n", numberOfBytesRead);
+       if (errno)
        {
-           fprintf(stderr, "could not read from UDP socket\n");
+           printf("could not read from UDP socket\n %s\n", strerror(errno));
+           fflush(stdout);
+       }
+       else{
+        pData->receiveCallback(buffer, numberOfBytesRead);
        }
        sleep(1u); 
     }
