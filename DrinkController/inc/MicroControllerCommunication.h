@@ -15,12 +15,9 @@ class MicroControllerCommunication
 
          MicroControllerCommunication();
          ~MicroControllerCommunication();
-
+    private:
         UDP* udp;
         int socket;
-    private:
-
-
 };
 
 
