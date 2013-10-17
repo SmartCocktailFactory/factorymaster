@@ -12,7 +12,10 @@ class HueCom
     public:
         void init();
         void cleanup();
-        void writeHUE(int);
+        void writeHUE(int, int, int, int);
+
+        void Farbkreis(int hue, int steps);
+        void blink(int hue,int period, int up, int low)
 };
 
 #endif
