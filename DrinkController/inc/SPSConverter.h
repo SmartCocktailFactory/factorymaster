@@ -1,8 +1,14 @@
 #ifndef _SPS_CONVERTER_H__
 #define _SPS_CONVERTER_H_
 
+/************************************************************
+    Includes
+*************************************************************/
 #include <string>
 
+/************************************************************
+    Defines
+*************************************************************/
 #define DWORD unsigned int
 #define	METHOD_GET	1
 #define METHOD_PUT 2
@@ -18,7 +24,9 @@
 #define CMD_ERROR_ACK 2
 #define CMD_PREPARE_FOR_NEXT_DRINK 3
 
-
+/************************************************************
+    Types
+*************************************************************/
 #pragma pack(1)
 typedef struct
 {	
@@ -44,19 +52,23 @@ typedef struct
 
 #pragma pack()
 
+/************************************************************
+    Class definition
+*************************************************************/
+
 class SPSConverter
 {
  public:
-  void ConvertIntoSendCommand( DWORD method, DWORD key, DWORD value, SCF_Frame* pFrame );
-  void ConvertReceivedData(DWORD *method, DWORD *key, DWORD *value, const char* pRecData);
+    void ConvertIntoSendCommand( DWORD method, DWORD key, DWORD value, SCF_Frame* pFrame );
+    void ConvertReceivedData(DWORD *method, DWORD *key, DWORD *value, const char* pRecData);
 
  private:
-  void ConvertToRemote( SCF_Frame* frame);
-  void ConvertToLocal( SCF_Frame* frame);
-  #ifdef __LITTLE_ENDIAN__
-  #else
-  void SwapFrame( SCF_Frame* frame);
-  #endif
-  };
+    void ConvertToRemote( SCF_Frame* frame);
+    void ConvertToLocal( SCF_Frame* frame);
+#ifdef __LITTLE_ENDIAN__
+#else
+    void SwapFrame( SCF_Frame* frame);
+#endif
+};
 
 #endif
