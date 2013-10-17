@@ -3,20 +3,14 @@
 #include <stdio.h>
 #include <string.h>
 
-
 static pthread_mutex_t S_mutex;
 static pthread_cond_t S_cond;
-
-
 
 static char responseBuffer[100];
 static void receiveCallback(char* a, unsigned int b);
 void MicroControllerCommunication::SendGetVersion(void){
    char command[4] = {0,0,0,1};
    udp->WriteData(socket, command,4);
-
-
-
 }
 void MicroControllerCommunication::SendDeliverIceCube(char amount){
     char command[5] = {0,0,0,3,4};

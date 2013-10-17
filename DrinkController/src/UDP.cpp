@@ -95,8 +95,6 @@ static void* UDPReceiveHandler(void* pArg)
   //struct sockaddr_in addr;
   char buffer[1500];
   int numberOfBytesRead;
-  int status = 0;
-  int j;
   socklen_t length; 
   for (;;)
     {
