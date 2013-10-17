@@ -48,10 +48,12 @@ void LiquidDeliverySystem::DeliverVolume(LiquidDeliverySystemIndex_e stationId,
 void LiquidDeliverySystem::WaitForGlass()
 {
     DWORD status = GetStatus();
-    
-    while (status != 1u /*Ready*/)
+    if (status != 1u)
     {
         fprintf( stderr, "No Glass available" );
+    }
+    while (status != 1u /*Ready*/)
+    {
         if (status == 4u /* Error */)
         {
             AckError();
@@ -65,10 +67,13 @@ void LiquidDeliverySystem::WaitForGlass()
 void LiquidDeliverySystem::WaitClassRemoved( )
 {
     DWORD status = GetStatus();
-    
-    while (status != 0u /*Not Ready*/)
+
+    if (status != 0u)
     {
         fprintf( stderr, "Please remove the glass" );
+    }
+    while (status != 0u /*Not Ready*/)
+    {
         if (status == 4u /* Error */)
         {
             AckError();
@@ -100,7 +105,7 @@ void LiquidDeliverySystem::AckError()
     SPSConverter sps;
     sps.ConvertIntoSendCommand( METHOD_PUT, KEY_Command, CMD_ERROR_ACK, &frame );
     pSpsConnection->WriteData( spsHandlerId, (char*) &frame, sizeof(frame) );
-    fprintf( stderr, "Ack error... len:%lu\n", sizeof(frame) );
+    fprintf( stderr, "Ack error... " );
     WaitForCmdAccepted( METHOD_RESPONSE, KEY_Command );
 }
 
@@ -110,7 +115,7 @@ void LiquidDeliverySystem::StartDeliver( )
     SPSConverter sps;
     sps.ConvertIntoSendCommand( METHOD_PUT, KEY_Command, CMD_DELIVER, &frame );
     pSpsConnection->WriteData( spsHandlerId, (char*) &frame, sizeof(frame) );
-    fprintf( stderr, "Start deliver... len:%lu\n", sizeof(frame) );
+    fprintf( stderr, "Start deliver... " );
     WaitForCmdAccepted( METHOD_RESPONSE, KEY_Command );
 }
 
@@ -120,7 +125,6 @@ unsigned int LiquidDeliverySystem::GetStatus()
     SPSConverter sps;
     sps.ConvertIntoSendCommand( METHOD_GET, KEY_Status, 0, &frame );
     pSpsConnection->WriteData( spsHandlerId, (char*) &frame, sizeof(frame) );
-    fprintf( stderr, "Get status len:%lu\n", sizeof(frame) );
     WaitForCmdAccepted( METHOD_RESPONSE, KEY_Status );
     return (unsigned int)S_waitingValue;
 }
@@ -131,7 +135,7 @@ void LiquidDeliverySystem::PrepareforNextTransfer( )
     SPSConverter sps;
     sps.ConvertIntoSendCommand( METHOD_PUT, KEY_Command, CMD_PREPARE_FOR_NEXT_DRINK, &frame );
     pSpsConnection->WriteData( spsHandlerId, (char*) &frame, sizeof(frame) );
-    fprintf( stderr, "Prepare for next transfer len:%lu\n", sizeof(frame) );
+    fprintf( stderr, "Prepare for next transfer" );
     WaitForCmdAccepted( METHOD_RESPONSE, KEY_Command );
 }
 
@@ -141,7 +145,7 @@ void LiquidDeliverySystem::UpdateStationId(LiquidDeliverySystemIndex_e id)
     SPSConverter sps;
     sps.ConvertIntoSendCommand( METHOD_PUT, KEY_StationID, id + 1, &frame );
     pSpsConnection->WriteData( spsHandlerId, (char*) &frame, sizeof(frame) );
-    fprintf( stderr, "Set station len:%lu\n", sizeof(frame) );
+    fprintf( stderr, "Set station" );
     WaitForCmdAccepted( METHOD_RESPONSE, KEY_StationID );
 }
 
@@ -151,7 +155,7 @@ void LiquidDeliverySystem::UpdateVolume(unsigned int volumeToDeliverInMl)
     SPSConverter sps;
     sps.ConvertIntoSendCommand( METHOD_PUT, KEY_Volume, volumeToDeliverInMl, &frame );
     pSpsConnection->WriteData( spsHandlerId, (char*) &frame, sizeof(frame) );
-    fprintf( stderr, "Set volume len:%lu\n", sizeof(frame) );
+    fprintf( stderr, "Set volume" );
     WaitForCmdAccepted( METHOD_RESPONSE, KEY_Volume );
 }
 
@@ -180,7 +184,6 @@ static void TcpReceiveHandler(char* pData, unsigned int numberOfData)
 
     pthread_mutex_lock( &S_count_mutex );
     sps.ConvertReceivedData( &S_waitingMethod, &S_waitingKey, &S_waitingValue, pData );
-    printf("server response : %u %u %u\n", S_waitingMethod, S_waitingKey, S_waitingValue );
     pthread_cond_signal( &S_count_threshold_cv );
     pthread_mutex_unlock( &S_count_mutex );
 }
