@@ -35,12 +35,12 @@ LiquidDeliverySystem::LiquidDeliverySystem(std::string ip, unsigned int port)
     pthread_cond_init ( &S_count_threshold_cv, NULL );
     pSpsConnection = new TCP( );
     spsHandlerId = pSpsConnection->OpenSocket( ip, port, TcpReceiveHandler );
+    pSpsConnection->WaitUntillConnected( );
 }
 
 void LiquidDeliverySystem::DeliverVolume(LiquidDeliverySystemIndex_e stationId, 
                                          unsigned int volumeToDeliverInMl)
 {
-    pSpsConnection->WaitUntillConnected( );
     WaitForGlass();
     UpdateStationId( stationId );
     UpdateVolume( volumeToDeliverInMl );
@@ -50,7 +50,6 @@ void LiquidDeliverySystem::DeliverVolume(LiquidDeliverySystemIndex_e stationId,
 void LiquidDeliverySystem::WaitForGlass()
 {
     DWORD status;    
-    pSpsConnection->WaitUntillConnected( );
     status = GetStatus();
 
     if (status != EVENT_READY)
@@ -95,6 +94,7 @@ bool LiquidDeliverySystem::CheckDeliveryDoneSuccessfull( )
 {
     DWORD status = GetStatus();
     bool ret = false;
+
     while ((status != EVENT_READY) && (status != EVENT_ERROR))
     {
         status = GetStatus();
