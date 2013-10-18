@@ -52,11 +52,11 @@ void UIController::UpdateGlobalState(UIGlobalState_e newState)
                 break;
             
             case E_UIState_WaitingForOrder:
-                UpdateAllLamps( E_HueColor_Cyan, 255, 50 );
+                UpdateAllLamps( E_HueColor_Blue, 255, 50 );
                 break;
             
             case E_UIState_Starting:
-                UpdateAllLamps( E_HueColor_Blue, 255, 50 );
+                UpdateAllLamps( E_HueColor_Cyan, 255, 50 );
                 
                 break;
             case E_UIState_GlassMissing:
