@@ -71,7 +71,23 @@ void UIController::UpdateBottleState(LiquidDeliverySystemIndex_e index, UIBottle
 {
     if (AllowedUpdateBottleState( ))
     {
-        
+        switch (newState)
+        {
+            case E_UIState_Bottle_Unknown:
+                break;
+
+            case E_UIState_Bottle_Empty:
+                UpdateLamp( index, E_HueColor_Red, 255, 50 );
+                break;
+                
+            case E_UIState_Bottle_DeliveringDone:
+                UpdateLamp( index, E_HueColor_Green, 255, 50 );
+                break;
+                
+            case E_UIState_Bottle_Delivering:
+                UpdateLamp( index, E_HueColor_Yellow, 255, 50 );
+                break;
+        }
     }
 }
     
