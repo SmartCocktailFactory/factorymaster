@@ -75,9 +75,9 @@ static void* CommandManager(void *)
     Order_t order;
     pUIController->UpdateGlobalState( E_UIState_Starting );
     communicationInterface.init( );
-    pBm->AssignBottleToLiquidStation( "OrangeJuice", E_LiquidDeliverySystemIndex_1, 700u );
+    pBm->AssignBottleToLiquidStation( "OrangeJuice", E_LiquidDeliverySystemIndex_3, 700u );
     pBm->AssignBottleToLiquidStation( "Bacardi", E_LiquidDeliverySystemIndex_2, 700u );
-    pBm->AssignBottleToLiquidStation( "Vodka", E_LiquidDeliverySystemIndex_3, 700u );
+    pBm->AssignBottleToLiquidStation( "Vodka", E_LiquidDeliverySystemIndex_1, 700u );
     fprintf( stderr, "SCF starting... \n"  );
             
     for (;;)
