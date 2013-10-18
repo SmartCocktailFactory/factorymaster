@@ -112,6 +112,8 @@ static void ProcessOrder(Order_t* pOrder, Com* pCom)
     
     fprintf( stderr, "New order:%d \n", pOrder->orderId );
     pUIController->UpdateGlobalState( E_UIState_Delivering );
+    pLiquidDeliverySystem->WaitForGlass( );
+    
     /* Ice necessary */
     numberIceCubes = NumberIceCubesToDeliver( pOrder );
     if (numberIceCubes != 0u)

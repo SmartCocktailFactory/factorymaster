@@ -37,7 +37,8 @@ class LiquidDeliverySystem
     void DeliverVolume(LiquidDeliverySystemIndex_e stationId, unsigned int volumeToDeliverInMl);
     bool CheckDeliveryDoneSuccessfull( );
     void WaitClassRemoved();
-
+    void WaitForGlass();
+    
  protected:
     LiquidDeliverySystem(std::string ip, unsigned int port);
         
@@ -53,7 +54,6 @@ class LiquidDeliverySystem
     void StartDeliver( );
     unsigned int GetStatus();
     void AckError();
-    void WaitForGlass();
 };
 
 #endif
