@@ -49,13 +49,10 @@ void LiquidDeliverySystem::DeliverVolume(LiquidDeliverySystemIndex_e stationId,
 
 void LiquidDeliverySystem::WaitForGlass()
 {
-    DWORD status;
-    
-    fprintf( stderr, "Wait for glass 1 \n" );
+    DWORD status;    
     pSpsConnection->WaitUntillConnected( );
-    fprintf( stderr, "Wait for glass 2 \n" );
     status = GetStatus();
-    fprintf( stderr, "Wait for glass 3 \n" );
+
     if (status != EVENT_READY)
     {
         UIController* pUIController = UIController::GetInstance( );
