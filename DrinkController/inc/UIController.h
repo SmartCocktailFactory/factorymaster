@@ -62,12 +62,12 @@ class UIController
     typedef enum
     {
         E_HueColor_Red = 0,
-        E_HueColor_Cyan = 32767,
-        E_HueColor_Yellow = 10922,
-        E_HueColor_Green = 29120,
-        E_HueColor_Blue = 43690,
-        E_HueColor_Orange = 5500,
-        E_HueColor_Purple = 60000
+        E_HueColor_Cyan = 30000,
+        E_HueColor_Yellow = 14000,
+        E_HueColor_Green = 26000,
+        E_HueColor_Blue = 47000,
+        E_HueColor_Orange = 7000,
+        E_HueColor_Purple = 54000
     } HueColor_e;
     
     static UIController *instanz;
