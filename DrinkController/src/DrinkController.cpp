@@ -113,7 +113,7 @@ static void ProcessOrder(Order_t* pOrder, Com* pCom)
     fprintf( stderr, "New order:%d \n", pOrder->orderId );
     pUIController->UpdateGlobalState( E_UIState_Delivering );
     pLiquidDeliverySystem->WaitForGlass( );
-    
+    pUIController->UpdateGlobalState( E_UIState_Delivering );
     /* Ice necessary */
     numberIceCubes = NumberIceCubesToDeliver( pOrder );
     if (numberIceCubes != 0u)
@@ -124,6 +124,24 @@ static void ProcessOrder(Order_t* pOrder, Com* pCom)
     else
     {
         fprintf( stderr, "Order:%d no ice\n", pOrder->orderId );
+    }
+    for (int j = E_LiquidDeliverySystemIndex_1;j<E_LiquidDeliverySystemIndex_Invalid;j++)
+    {
+	bool usedStation = true;
+    	for (unsigned int i = 0u; i < pOrder->ingredients.size( ); i++)
+    	{
+            liquidName = pOrder->ingredients[i].name;
+            stationIndex = pBM->GetLiquidStationIndex( liquidName );
+	    if(stationIndex == (LiquidDeliverySystemIndex_e)j)
+            {
+		usedStation = false;
+		break;
+            }
+	}
+	if(usedStation == false)
+	{
+	    pUIController->UpdateBottleState( (LiquidDeliverySystemIndex_e)j, E_UIState_Bottle_DeliveringDone );
+        }
     }
     /* Deliver all liquids. */
     for (unsigned int i = 0u; i < pOrder->ingredients.size( ); i++)
